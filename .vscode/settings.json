@@ -2786,7 +2786,8 @@
         "QuestieConfigFrame",
         "QuestieConfig",
         "QuestieCompat",
-        "QuestieWorldMapButtonMixin",,
+        "QuestieWorldMapButtonMixin",
+        ,
         "MAX_PARTY_MEMBERS",
         "MAX_RAID_MEMBERS",
         "SecureHandlerSetFrameRef",
@@ -6148,16 +6149,13 @@
         ".vscode",
         "!wow-ui-source-classic"
     ],
-
     "Lua.workspace.library": [
         ".\\.types\\.SubModules\\BlizzardInterfaceCode",
         ".\\.types\\.SubModules\\vscode-wow-api\\EmmyLua\\API",
         ".\\.types\\.SubModules\\vscode-wow-api\\EmmyLua\\Optional",
     ],
-
     "Lua.workspace.preloadFileSize": 3000,
     "Lua.workspace.maxPreload": 2000,
-
     "search.exclude": {
         ".github/**": true,
         ".vscode/**": true,
@@ -6172,23 +6170,18 @@
         "Libs/Lib*": true,
         "releases": true
     },
-
     // Removes trailing whitespaces
     "files.trimTrailingWhitespace": true,
-
     // The number of spaces a tab is equal to. This setting is overridden
     // based on the file contents when `editor.detectIndentation` is true.
     "editor.tabSize": 4,
-
     // Insert spaces when pressing Tab. This setting is overriden
     // based on the file contents when `editor.detectIndentation` is true.
     "editor.insertSpaces": true,
-
     // When opening a file, `editor.tabSize` and `editor.insertSpaces`
     // will be detected based on the file contents. Set to false to keep
     // the values you've explicitly set, above.
     "editor.detectIndentation": false,
-
     // Default end of line
     "files.eol": "\n",
     "Lua.diagnostics.disable": [
@@ -6219,6 +6212,64 @@
     "Lua.format.defaultConfig": {
         "max_line_length": "800",
         "align_continuous_assign_statement": "false"
-    }
-
+    },
+    "multiCommand.commands": [
+        {
+            // 這個是我們自訂指令的識別名稱
+            "command": "extension.sort9LinesThenSkip2",
+            // 這個序列 (sequence) 裏面，依順序執行多個內建指令
+            "sequence": [
+                // 1) 往下「選取」8行，連同目前游標所在行，即共 9 行
+                {
+                    "command": "cursorMove",
+                    "args": {
+                        "to": "down",
+                        "by": "line",
+                        "value": 9,
+                        "select": true
+                    }
+                },
+                // 2) 執行「升冪排序」
+                {
+                    "command": "editor.action.sortLinesAscending"
+                },
+                // 3) 取消選取 (避免排序後游標還停留在選取狀態)
+                {
+                    "command": "cancelSelection"
+                },
+                // 4) 往下移動 2 行，略過不排序的區段
+                {
+                    "command": "cursorMove",
+                    "args": {
+                        "to": "down",
+                        "by": "line",
+                        "value": 2
+                    }
+                }
+            ]
+        },
+        {
+            // 指令識別名稱，可自訂
+            "command": "extension.pasteEvery11Lines",
+            "sequence": [
+                // 1) 游標向下移動 11 行
+                {
+                    "command": "cursorMove",
+                    "args": {
+                        "to": "down",
+                        "by": "line",
+                        "value": 11
+                    }
+                },
+                // 2) 在當前游標所在行的「下面」插入新行
+                {
+                    "command": "editor.action.insertLineAfter"
+                },
+                // 3) 輸入文字 ["enUS"] = true,
+                {
+                    "command": "editor.action.clipboardPasteAction"
+                }
+            ]
+        }
+    ]
 }
